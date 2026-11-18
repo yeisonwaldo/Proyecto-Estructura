@@ -1,0 +1,29 @@
+@startuml
+skinparam classAttributeIconSize 0
+package model {
+  class Producto { -id:int; -nombre:String; -stock:int }
+  class Pedido { -id:int; -cliente:String; -productoId:int; -cantidad:int; -estado:Estado }
+  enum Estado { EN_COLA; CARGADO; ENTREGADO; RECHAZADO }
+}
+package logic {
+  class "ArbolAVL<K,V>" as ArbolAVL { +insertar(); +buscar(); +eliminar(); +inOrden(); +preOrden(); +postOrden() }
+  class "Pila<T>" as Pila { +apilar(); +desapilar(); +invertir() }
+  class "Cola<T>" as Cola { +encolar(); +desencolar(); +verFrente() }
+  class "ListaEnlazada<T>" as ListaEnlazada { +agregar(); +obtener() }
+  class Inventario { +agregar(); +buscar(); +editar(); +eliminar() }
+  class Logistica { +registrarPedido(); +procesarSiguiente(); +entregarSiguiente(); +entregarTodo() }
+  class Persistencia { +guardar(); +cargar() }
+}
+package ui { class VentanaPrincipal; class Main }
+Inventario *-- "1" ArbolAVL : <Integer,Producto>
+ArbolAVL o-- Producto
+Logistica --> Inventario
+Logistica *-- "1" Cola : <Pedido>
+Logistica *-- "1" Pila : <Pedido>
+Logistica *-- "1" ListaEnlazada : <String>
+Pedido --> Estado
+Persistencia ..> Inventario
+VentanaPrincipal --> Logistica
+VentanaPrincipal --> Inventario
+Main ..> VentanaPrincipal
+@enduml

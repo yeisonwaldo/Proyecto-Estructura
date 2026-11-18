@@ -1,0 +1,86 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package model {
+  class Producto {
+    -id : int
+    -nombre : String
+    -stock : int
+  }
+  class Pedido {
+    -id : int
+    -cliente : String
+    -productoId : int
+    -cantidad : int
+    -estado : Estado
+  }
+  enum Estado {
+    EN_COLA
+    CARGADO
+    ENTREGADO
+    RECHAZADO
+  }
+}
+
+package logic {
+  class ArbolAVL<K,V> {
+    +insertar(clave, valor)
+    +buscar(clave) : V
+    +eliminar(clave) : boolean
+    +inOrden(accion)
+    +preOrden(accion)
+    +postOrden(accion)
+    +altura() : int
+  }
+  class Pila<T> {
+    +apilar(dato)
+    +desapilar() : T
+    +verCima() : T
+    +invertir()
+  }
+  class Cola<T> {
+    +encolar(dato)
+    +desencolar() : T
+    +verFrente() : T
+  }
+  class ListaEnlazada<T> {
+    +agregar(dato)
+    +obtener(indice) : T
+  }
+  class Inventario {
+    +agregar(id, nombre, stock)
+    +buscar(id) : Producto
+    +editar(id, nombre, stock)
+    +eliminar(id)
+    +inOrden() : List
+  }
+  class Logistica {
+    +registrarPedido(cliente, productoId, cantidad)
+    +procesarSiguiente() : Pedido
+    +entregarSiguiente() : Pedido
+    +entregarTodo() : int
+    +invertirCamion()
+  }
+  class Persistencia {
+    +guardar(inventario, ruta)
+    +cargar(inventario, ruta) : int
+  }
+}
+
+package ui {
+  class VentanaPrincipal
+  class Main
+}
+
+Inventario *-- ArbolAVL : Integer, Producto
+ArbolAVL o-- Producto
+Logistica --> Inventario
+Logistica *-- Cola : Pedido
+Logistica *-- Pila : Pedido
+Logistica *-- ListaEnlazada : String
+Pedido --> Estado
+Persistencia ..> Inventario
+VentanaPrincipal --> Logistica
+VentanaPrincipal --> Inventario
+Main ..> VentanaPrincipal
+@enduml
